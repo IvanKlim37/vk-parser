@@ -27,7 +27,7 @@ MAX_TOKEN = _env.get("MAX_TOKEN") or os.environ.get("MAX_TOKEN", "")
 
 VK_VERSION = "5.199"
 MSK        = timezone(timedelta(hours=3))
-MAX_API    = "https://botapi.max.ru"
+MAX_API    = "https://platform-api.max.ru"
 SUBS_FILE  = "subscribers.json"  # файл хранит подписчиков между перезапусками
 
 # ─── Подписчики ───────────────────────────────────────────────────────────────
@@ -132,13 +132,13 @@ EXCLUDE = [
 
 def max_send(chat_id, text: str):
     """Отправляет сообщение. Если длиннее 4000 символов — бьёт на части."""
-    # MAX ограничивает сообщение ~4000 символов
     chunks = [text[i:i+3900] for i in range(0, len(text), 3900)]
     for chunk in chunks:
         try:
             requests.post(
                 f"{MAX_API}/messages",
-                params={"access_token": MAX_TOKEN},
+                headers={"Authorization": MAX_TOKEN},
+                params={"v": "1.2.5"},
                 json={"recipient": {"chat_id": chat_id}, "body": {"text": chunk}},
                 timeout=10,
             )
@@ -149,11 +149,16 @@ def max_send(chat_id, text: str):
 
 
 def max_get_updates(marker=None) -> dict:
-    params = {"access_token": MAX_TOKEN, "timeout": 30, "limit": 100}
+    params = {"timeout": 30, "limit": 100, "v": "1.2.5"}
     if marker:
         params["marker"] = marker
     try:
-        resp = requests.get(f"{MAX_API}/updates", params=params, timeout=40)
+        resp = requests.get(
+            f"{MAX_API}/updates",
+            headers={"Authorization": MAX_TOKEN},
+            params=params,
+            timeout=40,
+        )
         resp.raise_for_status()
         return resp.json()
     except Exception as e:
