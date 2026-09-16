@@ -157,6 +157,11 @@ def bot_polling():
 
     while True:
         try:
+            if not MAX_TOKEN:
+                print("[!!!] MAX_TOKEN пустой! Проверьте переменные окружения на Railway.")
+                time.sleep(60)
+                continue
+
             data    = max_get_updates(marker)
             updates = data.get("updates", [])
             marker  = data.get("marker", marker)
@@ -205,8 +210,13 @@ def bot_polling():
                     ).start()
 
         except Exception as e:
-            print(f"  [!] Ошибка в polling: {e}")
-            time.sleep(5)
+            err = str(e)
+            print(f"  [!] Ошибка в polling: {err}")
+            if "429" in err:
+                print("  Слишком много запросов, жду 60 секунд...")
+                time.sleep(60)
+            else:
+                time.sleep(5)
 
 # ─── VK API ───────────────────────────────────────────────────────────────────
 
