@@ -139,6 +139,19 @@ def tg_send(chat_id, text: str):
             print(f"  [!] Ошибка отправки в TG: {e}")
 
 
+def tg_delete_webhook():
+    """Удаляет webhook если был установлен — иначе getUpdates вернёт 409."""
+    try:
+        resp = requests.post(
+            f"{TG_API}/deleteWebhook",
+            json={"drop_pending_updates": True},
+            timeout=10,
+        )
+        print(f"  deleteWebhook: {resp.json().get('description', '')}")
+    except Exception as e:
+        print(f"  [!] deleteWebhook ошибка: {e}")
+
+
 def tg_get_updates(offset=None) -> list:
     try:
         params = {"timeout": 30, "limit": 100}
@@ -150,12 +163,14 @@ def tg_get_updates(offset=None) -> list:
         return data.get("result", [])
     except Exception as e:
         print(f"  [!] Ошибка polling: {e}")
+        time.sleep(5)
         return []
 
 
 def bot_polling():
     """Слушает входящие сообщения в фоновом потоке."""
     global subscribed_chats
+    tg_delete_webhook()
     offset = None
     print("Telegram бот запущен. Ожидаю /start...")
 
@@ -308,7 +323,7 @@ def collect_urls(window_from: datetime, window_to: datetime) -> list:
             if not text or not match_topics(text):
                 continue
             urls.append(f"https://vk.com/wall{p.get('owner_id')}_{p.get('id')}")
-        time.sleep(0.35)
+        time.sleep(1)
 
     for group in NO_FILTER_GROUPS:
         for p in fetch_posts(group["id"]):
@@ -317,7 +332,7 @@ def collect_urls(window_from: datetime, window_to: datetime) -> list:
             if not (window_from <= dt < window_to):
                 continue
             urls.append(f"https://vk.com/wall{p.get('owner_id')}_{p.get('id')}")
-        time.sleep(0.35)
+        time.sleep(1)
 
     return urls
 
