@@ -324,7 +324,7 @@ def collect_urls(window_from: datetime, window_to: datetime) -> list:
             if not text or not match_topics(text):
                 continue
             urls.append(f"https://vk.com/wall{p.get('owner_id')}_{p.get('id')}")
-        time.sleep(1)
+        time.sleep(2)
 
     for group in NO_FILTER_GROUPS:
         for p in fetch_posts(group["id"]):
@@ -333,7 +333,7 @@ def collect_urls(window_from: datetime, window_to: datetime) -> list:
             if not (window_from <= dt < window_to):
                 continue
             urls.append(f"https://vk.com/wall{p.get('owner_id')}_{p.get('id')}")
-        time.sleep(1)
+        time.sleep(2)
 
     return urls
 
