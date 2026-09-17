@@ -14,7 +14,7 @@ import schedule
 from datetime import datetime, timezone, timedelta
 
 # ══════════════════════════════════════════════════════════
-TG_TOKEN = "8831015403:AAE6Qd9k-yWA6ib-b60bC_ST_4nOnaQXWHQ"
+TG_TOKEN = "8831015403:AAF7xa9flVldobGjEJyRiuKkQbraZSkD1_E"
 VK_TOKEN = "vk1.a.2prxvO3cCOd9T7XGATkgXD5ssMfX-e7_q3JAx0NyzOoiLA5URGjaYsM0VmZndgVzM_-Lk8nBLEoO4oQU9TMg1mXsDywcRfejcuEoINZ_yPOMhToTIvksNwY8xVpyXomnpLX1CUyYTR3MHJajUyH7EsW-MIzgXoVixOghQknF0ZKHE3cB_NQyAoSHxhuliGrDMyMa5eFyrsBnqEW4md6Isw"
 # ══════════════════════════════════════════════════════════
 
@@ -247,8 +247,9 @@ def fetch_posts(group_id: str) -> list:
                 if code in (5, 1116):
                     print(f"  [!!!] ТОКЕН VK НЕДЕЙСТВИТЕЛЕН (код {code}).")
                     return []
-                if code == 6:
-                    time.sleep(2)
+                if code in (6, 9):
+                    print(f"  [!] VK flood, жду 10 секунд...")
+                    time.sleep(10)
                     continue
                 print(f"  [!] VK API {code}: {msg}")
                 return []
