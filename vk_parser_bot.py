@@ -14,8 +14,8 @@ import schedule
 from datetime import datetime, timezone, timedelta
 
 # ══════════════════════════════════════════════════════════
-TG_TOKEN = os.environ.get("TG_TOKEN", "")
-VK_TOKEN = os.environ.get("VK_TOKEN", "")
+TG_TOKEN = "8831015403:AAE6Qd9k-yWA6ib-b60bC_ST_4nOnaQXWHQ"
+VK_TOKEN = "vk1.a.2prxvO3cCOd9T7XGATkgXD5ssMfX-e7_q3JAx0NyzOoiLA5URGjaYsM0VmZndgVzM_-Lk8nBLEoO4oQU9TMg1mXsDywcRfejcuEoINZ_yPOMhToTIvksNwY8xVpyXomnpLX1CUyYTR3MHJajUyH7EsW-MIzgXoVixOghQknF0ZKHE3cB_NQyAoSHxhuliGrDMyMa5eFyrsBnqEW4md6Isw"
 # ══════════════════════════════════════════════════════════
 
 MSK        = timezone(timedelta(hours=3))
